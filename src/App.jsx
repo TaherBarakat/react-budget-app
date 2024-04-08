@@ -7,11 +7,14 @@ import { UNCATEGORIZED_BUDGET_ID, useBudgets } from "./context/BudgetsContext";
 import AddExpenseModal from "./AddExpenseModal";
 import UncategorizedBudgetCard from "./UncategorizedBudgetCard";
 import TotalBudgetCard from "./TotalBudgetCard";
+import ViewExpensesModal from "./ViewExpensesModal";
 function App() {
      const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
      const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
+     const [viewExpensesModalBudgetId, setViewExpensesModalBudgetId] =
+          useState();
      const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState();
-     const { budgets, getBudgetExpenses } = useBudgets();
+     const { budgets, expenses, getBudgetExpenses } = useBudgets();
      function openAddExpenseModal(budgetId) {
           setShowAddExpenseModal(true);
           setAddExpenseModalBudgetId(budgetId);
@@ -35,6 +38,22 @@ function App() {
                               Add Expanse
                          </Button>
                     </Stack>
+                    {(!budgets || budgets?.length === 0) &&
+                         (!expenses || expenses?.length === 0) && (
+                              <div className=" mt-5 d-flex  flex-column justify-content-center   pt-10 ">
+                                   <p className="mt-5 fs-3">
+                                        You don't have any budgets yet!
+                                   </p>
+                                   <p className=" fs-5">
+                                        Click on the
+                                        <span className="fw-bolder">
+                                             {" "}
+                                             Add Budget{" "}
+                                        </span>
+                                        button to create your first budget.
+                                   </p>
+                              </div>
+                         )}
                     <div
                          style={{
                               display: "grid",
@@ -60,11 +79,21 @@ function App() {
                                         onAddExpenseClick={() => {
                                              openAddExpenseModal(budget.id);
                                         }}
+                                        onViewExpensesClick={() => {
+                                             setViewExpensesModalBudgetId(
+                                                  budget.id
+                                             );
+                                        }}
                                    ></BudgetCard>
                               );
                          })}
                          <UncategorizedBudgetCard
                               onAddExpenseClick={openAddExpenseModal}
+                              onViewExpensesClick={() => {
+                                   setViewExpensesModalBudgetId(
+                                        UNCATEGORIZED_BUDGET_ID
+                                   );
+                              }}
                          />
                          <TotalBudgetCard></TotalBudgetCard>
                     </div>
@@ -77,6 +106,10 @@ function App() {
                     defaultBudgetId={addExpenseModalBudgetId}
                     show={showAddExpenseModal}
                     handleClose={() => setShowAddExpenseModal(false)}
+               />
+               <ViewExpensesModal
+                    budgetId={viewExpensesModalBudgetId}
+                    handleClose={() => setViewExpensesModalBudgetId()}
                />
           </>
      );
