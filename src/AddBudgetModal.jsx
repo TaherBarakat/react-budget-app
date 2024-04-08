@@ -5,7 +5,10 @@ export default function AddBudgetModal({ handleClose, show }) {
      const { addBudget } = useBudgets();
      function handleSubmit(event) {
           event.preventDefault();
-          addBudget({ name: name.current.value, max: max.current.value });
+          addBudget({
+               name: name.current.value,
+               max: parseFloat(max.current.value),
+          });
           handleClose();
      }
      const name = useRef();
