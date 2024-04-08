@@ -3,9 +3,10 @@ import { Stack, Button } from "react-bootstrap";
 import BudgetCard from "./BudgetCard";
 import AddBudgetModal from "./AddBudgetModal";
 import { useState } from "react";
-import { useBudgets } from "./context/BudgetsContext";
+import { UNCATEGORIZED_BUDGET_ID, useBudgets } from "./context/BudgetsContext";
 import AddExpenseModal from "./AddExpenseModal";
 import UncategorizedBudgetCard from "./UncategorizedBudgetCard";
+import TotalBudgetCard from "./TotalBudgetCard";
 function App() {
      const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
      const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
@@ -57,13 +58,15 @@ function App() {
                                         max={budget.max}
                                         amount={amount}
                                         onAddExpenseClick={() => {
-                                             console.log("op");
                                              openAddExpenseModal(budget.id);
                                         }}
                                    ></BudgetCard>
                               );
                          })}
-                         <UncategorizedBudgetCard />
+                         <UncategorizedBudgetCard
+                              onAddExpenseClick={openAddExpenseModal}
+                         />
+                         <TotalBudgetCard></TotalBudgetCard>
                     </div>
                </Container>
                <AddBudgetModal
